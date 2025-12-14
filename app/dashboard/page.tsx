@@ -3,6 +3,15 @@
 import { useSession, signOut } from "@/lib/auth-client";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 
 export default function DashboardPage() {
   const { data: session, isPending } = useSession();
@@ -16,9 +25,13 @@ export default function DashboardPage() {
 
   if (isPending) {
     return (
-      <div className="max-w-md mx-auto p-6 mt-10 text-center">
-        <p>Loading...</p>
-      </div>
+      <main className="flex justify-center items-center min-h-screen bg-gray-50">
+        <Card className="w-full max-w-sm">
+          <CardContent className="text-center">
+            <p>Loading...</p>
+          </CardContent>
+        </Card>
+      </main>
     );
   }
 
@@ -32,26 +45,30 @@ export default function DashboardPage() {
   }
 
   return (
-    <main className="max-w-md mx-auto p-6 mt-10">
-      <div className="bg-white shadow rounded-lg p-6">
-        <h1 className="text-2xl font-bold mb-4">
-          Welcome, {session.user.name}!
-        </h1>
-        <div className="space-y-2 mb-6">
-          <p className="text-gray-600">
-            <span className="font-medium">Email:</span> {session.user.email}
-          </p>
-          <p className="text-gray-600">
-            <span className="font-medium">ID:</span> {session.user.id}
-          </p>
-        </div>
-        <button
-          onClick={handleSignOut}
-          className="w-full bg-red-600 text-white py-2 rounded hover:bg-red-700"
-        >
-          Sign Out
-        </button>
-      </div>
+    <main className="flex justify-center items-center min-h-screen bg-gray-50">
+      <Card className="w-full max-w-sm">
+        <CardHeader>
+          <CardTitle>Dashboard</CardTitle>
+          <CardDescription>
+            Welcome back, {session.user.name}!
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div className="space-y-2">
+            <p className="text-gray-600">
+              <span className="font-medium">Email:</span> {session.user.email}
+            </p>
+            <p className="text-gray-600">
+              <span className="font-medium">ID:</span> {session.user.id}
+            </p>
+          </div>
+        </CardContent>
+        <CardFooter>
+          <Button onClick={handleSignOut} className="w-full" variant="destructive">
+            Sign Out
+          </Button>
+        </CardFooter>
+      </Card>
     </main>
   );
 }
