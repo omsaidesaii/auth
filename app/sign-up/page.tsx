@@ -15,7 +15,7 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import GoogleIcon from '@mui/icons-material/Google';
+import GoogleIcon from "@mui/icons-material/Google";
 
 export default function SignUpPage() {
   const router = useRouter();
@@ -85,6 +85,16 @@ export default function SignUpPage() {
               {error}
             </div>
           )}
+
+          <Button
+            variant="outline"
+            className="w-full mb-4"
+            onClick={handleGoogleSignUp}
+          >
+            <GoogleIcon />
+            Sign up with Google
+          </Button>
+
           <div className="relative mb-4">
             <div className="absolute inset-0 flex items-center">
               <div className="w-full border-t border-gray-300"></div>
@@ -141,14 +151,6 @@ export default function SignUpPage() {
             className="w-full"
           >
             {isLoading ? "Creating account..." : "Sign Up"}
-          </Button>
-          <Button
-            variant="outline"
-            className="w-full"
-            onClick={handleGoogleSignUp}
-          >
-           <GoogleIcon/>
-            Sign up with Google
           </Button>
         </CardFooter>
       </Card>

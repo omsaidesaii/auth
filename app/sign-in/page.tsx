@@ -15,7 +15,7 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import GoogleIcon from '@mui/icons-material/Google';
+import GoogleIcon from "@mui/icons-material/Google";
 
 export default function SignInPage() {
   const router = useRouter();
@@ -74,10 +74,20 @@ export default function SignInPage() {
               {error}
             </div>
           )}
+          <Button
+            variant="outline"
+            className="w-full mb-4"
+            onClick={handleGoogleSignIn}
+          >
+            <GoogleIcon />
+            Sign in with Google
+          </Button>
+
           <div className="relative mb-4">
             <div className="absolute inset-0 flex items-center">
               <div className="w-full border-t border-gray-300"></div>
             </div>
+
             <div className="relative flex justify-center text-sm">
               <span className="px-2 bg-white text-gray-500">
                 Or continue with email
@@ -102,7 +112,6 @@ export default function SignInPage() {
             <div className="grid gap-2">
               <div className="flex items-center">
                 <Label htmlFor="password">Password</Label>
-                
               </div>
               <Input
                 id="password"
@@ -122,14 +131,6 @@ export default function SignInPage() {
             className="w-full"
           >
             {isLoading ? "Signing in..." : "Sign In"}
-          </Button>
-          <Button
-            variant="outline"
-            className="w-full"
-            onClick={handleGoogleSignIn}
-          >
-           <GoogleIcon/>
-            Sign in with Google
           </Button>
         </CardFooter>
       </Card>
