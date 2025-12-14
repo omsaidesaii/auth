@@ -1,13 +1,26 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { signIn } from "@/lib/auth-client";
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardAction,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 
 export default function SignInPage() {
   const router = useRouter();
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+  const formRef = useRef<HTMLFormElement>(null);
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -18,7 +31,7 @@ export default function SignInPage() {
     const email = formData.get("email") as string;
     const password = formData.get("password") as string;
 
-    const res = await signIn.email(
+    await signIn.email(
       { email, password },
       {
         onSuccess: () => {
@@ -33,54 +46,79 @@ export default function SignInPage() {
   }
 
   return (
-    <main className="max-w-md mx-auto p-6 mt-10">
-      <h1 className="text-2xl font-bold mb-6">Sign In</h1>
-      {error && (
-        <div className="bg-red-50 text-red-600 p-3 rounded mb-4">
-          {error}
-        </div>
-      )}
-      <form onSubmit={handleSubmit} className="space-y-4">
-        <div>
-          <label htmlFor="email" className="block text-sm font-medium mb-1">
-            Email
-          </label>
-          <input
-            id="email"
-            name="email"
-            type="email"
-            placeholder="you@example.com"
-            required
-            className="w-full px-3 py-2 border border-gray-300 rounded"
-          />
-        </div>
-        <div>
-          <label htmlFor="password" className="block text-sm font-medium mb-1">
-            Password
-          </label>
-          <input
-            id="password"
-            name="password"
-            type="password"
-            placeholder="••••••••"
-            required
-            className="w-full px-3 py-2 border border-gray-300 rounded"
-          />
-        </div>
-        <button
-          type="submit"
-          disabled={isLoading}
-          className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700 disabled:opacity-50"
-        >
-          {isLoading ? "Signing in..." : "Sign In"}
-        </button>
-      </form>
-      <p className="mt-4 text-center text-sm">
-        Don't have an account?{" "}
-        <a href="/sign-up" className="text-blue-600 hover:underline">
-          Sign up
-        </a>
-      </p>
+    <main className="flex justify-center items-center min-h-screen bg-gray-50">
+      <Card className="w-full max-w-sm">
+        <CardHeader>
+          <CardTitle>Sign In</CardTitle>
+          <CardDescription>
+            Enter your email and password to sign in
+          </CardDescription>
+          <CardAction>
+            <Button variant="link" asChild>
+              <a href="/sign-up">Don&apos;t have an account?</a>
+            </Button>
+          </CardAction>
+        </CardHeader>
+        <CardContent>
+          {error && (
+            <div className="bg-red-50 text-red-600 p-3 rounded mb-4">
+              {error}
+            </div>
+          )}
+          <form
+            ref={formRef}
+            onSubmit={handleSubmit}
+            className="flex flex-col gap-6"
+          >
+            <div className="grid gap-2">
+              <Label htmlFor="email">Email</Label>
+              <Input
+                id="email"
+                name="email"
+                type="email"
+                placeholder="you@example.com"
+                required
+              />
+            </div>
+            <div className="grid gap-2">
+              <div className="flex items-center">
+                <Label htmlFor="password">Password</Label>
+                <a
+                  href="#"
+                  className="ml-auto inline-block text-sm underline-offset-4 hover:underline"
+                >
+                  Forgot your password?
+                </a>
+              </div>
+              <Input
+                id="password"
+                name="password"
+                type="password"
+                placeholder="••••••••"
+                required
+              />
+            </div>
+          </form>
+        </CardContent>
+        <CardFooter className="flex-col gap-2">
+          <Button
+            type="button"
+            onClick={() => formRef.current?.requestSubmit()}
+            disabled={isLoading}
+            className="w-full"
+          >
+            {isLoading ? "Signing in..." : "Sign In"}
+          </Button>
+          <Button variant="outline" className="w-full" disabled>
+            <img
+              src="https://www.gstatic.com/images/branding/googlelogo/svg/googlelogo_clr_74x24px.svg"
+              alt="Google"
+              className="w-4 h-4 mr-2 filter brightness-0 invert"
+            />
+            Sign in with Google
+          </Button>
+        </CardFooter>
+      </Card>
     </main>
   );
 }
