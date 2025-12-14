@@ -15,6 +15,7 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import GoogleIcon from '@mui/icons-material/Google';
 
 export default function SignUpPage() {
   const router = useRouter();
@@ -146,11 +147,7 @@ export default function SignUpPage() {
             className="w-full"
             onClick={handleGoogleSignUp}
           >
-            <img
-              src="https://www.gstatic.com/images/branding/googlelogo/svg/googlelogo_clr_74x24px.svg"
-              alt="Google"
-              className="w-4 h-4 mr-2 filter brightness-0 invert"
-            />
+           <GoogleIcon/>
             Sign up with Google
           </Button>
         </CardFooter>
