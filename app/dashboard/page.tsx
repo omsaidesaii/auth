@@ -49,9 +49,7 @@ export default function DashboardPage() {
       <Card className="w-full max-w-sm">
         <CardHeader>
           <CardTitle>Dashboard</CardTitle>
-          <CardDescription>
-            Welcome back, {session.user.name}!
-          </CardDescription>
+          <CardDescription>Welcome back, {session.user.name}!</CardDescription>
         </CardHeader>
         <CardContent>
           <div className="space-y-2">
@@ -64,7 +62,11 @@ export default function DashboardPage() {
           </div>
         </CardContent>
         <CardFooter>
-          <Button onClick={handleSignOut} className="w-full" variant="destructive">
+          <Button
+            onClick={handleSignOut}
+            className="w-full"
+            variant="destructive"
+          >
             Sign Out
           </Button>
         </CardFooter>

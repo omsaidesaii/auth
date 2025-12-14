@@ -2,7 +2,7 @@
 
 import { useState, useRef } from "react";
 import { useRouter } from "next/navigation";
-import { signUp } from "@/lib/auth-client";
+import { signUp, signIn } from "@/lib/auth-client";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -15,7 +15,6 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import GoogleIcon from '@mui/icons-material/Google';
 
 export default function SignUpPage() {
   const router = useRouter();
@@ -33,18 +32,36 @@ export default function SignUpPage() {
     const password = formData.get("password") as string;
     const name = formData.get("name") as string;
 
-    const res = await signUp.email(
-      { name, email, password },
-      {
-        onSuccess: () => {
-          router.push("/dashboard");
-        },
-        onError: (ctx) => {
-          setError(ctx.error.message || "Something went wrong.");
-          setIsLoading(false);
-        },
-      }
-    );
+    try {
+      await signUp.email(
+        { name, email, password },
+        {
+          onRequest: () => {
+            setIsLoading(true);
+          },
+          onSuccess: () => {
+            router.push("/dashboard");
+            router.refresh();
+          },
+          onError: (ctx) => {
+            setError(ctx.error.message || "Something went wrong.");
+            setIsLoading(false);
+          },
+        }
+      );
+    } catch (err) {
+      console.error("Sign up error:", err);
+      setError("An unexpected error occurred. Please try again.");
+      setIsLoading(false);
+    }
+  }
+
+  async function handleGoogleSignUp() {
+    setError(null);
+    await signIn.social({
+      provider: "google",
+      callbackURL: "/dashboard",
+    });
   }
 
   return (
@@ -67,7 +84,21 @@ export default function SignUpPage() {
               {error}
             </div>
           )}
-          <form ref={formRef} onSubmit={handleSubmit} className="flex flex-col gap-6">
+          <div className="relative mb-4">
+            <div className="absolute inset-0 flex items-center">
+              <div className="w-full border-t border-gray-300"></div>
+            </div>
+            <div className="relative flex justify-center text-sm">
+              <span className="px-2 bg-white text-gray-500">
+                Or continue with email
+              </span>
+            </div>
+          </div>
+          <form
+            ref={formRef}
+            onSubmit={handleSubmit}
+            className="flex flex-col gap-6"
+          >
             <div className="grid gap-2">
               <Label htmlFor="name">Name</Label>
               <Input
@@ -110,8 +141,17 @@ export default function SignUpPage() {
           >
             {isLoading ? "Creating account..." : "Sign Up"}
           </Button>
-          <Button variant="outline" className="w-full" disabled>
-          <GoogleIcon/>  Sign up with Google
+          <Button
+            variant="outline"
+            className="w-full"
+            onClick={handleGoogleSignUp}
+          >
+            <img
+              src="https://www.gstatic.com/images/branding/googlelogo/svg/googlelogo_clr_74x24px.svg"
+              alt="Google"
+              className="w-4 h-4 mr-2 filter brightness-0 invert"
+            />
+            Sign up with Google
           </Button>
         </CardFooter>
       </Card>

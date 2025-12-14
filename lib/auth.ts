@@ -10,8 +10,14 @@ export const auth = betterAuth({
   }),
   emailAndPassword: { 
     enabled: true,
-    requireEmailVerification: false, // Add this for now
+    requireEmailVerification: false,
   },
-  secret: process.env.BETTER_AUTH_SECRET!, // IMPORTANT: Add this
-  baseURL: process.env.BETTER_AUTH_URL || "http://localhost:3000", // Add this
+  socialProviders: {
+    google: {
+      clientId: process.env.GOOGLE_CLIENT_ID!,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
+    },
+  },
+  secret: process.env.BETTER_AUTH_SECRET!,
+  baseURL: process.env.BETTER_AUTH_URL || "http://localhost:3000",
 });

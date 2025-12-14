@@ -2,7 +2,7 @@
 
 import { useState, useRef } from "react";
 import { useRouter } from "next/navigation";
-import { signIn } from "@/lib/auth-client";
+import { signIn, authClient } from "@/lib/auth-client";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -15,7 +15,6 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import GoogleIcon from '@mui/icons-material/Google';
 
 export default function SignInPage() {
   const router = useRouter();
@@ -46,6 +45,14 @@ export default function SignInPage() {
     );
   }
 
+  async function handleGoogleSignIn() {
+    setError(null);
+    await signIn.social({
+      provider: "google",
+      callbackURL: "/dashboard",
+    });
+  }
+
   return (
     <main className="flex justify-center items-center min-h-screen bg-gray-50">
       <Card className="w-full max-w-sm">
@@ -66,6 +73,16 @@ export default function SignInPage() {
               {error}
             </div>
           )}
+          <div className="relative mb-4">
+            <div className="absolute inset-0 flex items-center">
+              <div className="w-full border-t border-gray-300"></div>
+            </div>
+            <div className="relative flex justify-center text-sm">
+              <span className="px-2 bg-white text-gray-500">
+                Or continue with email
+              </span>
+            </div>
+          </div>
           <form
             ref={formRef}
             onSubmit={handleSubmit}
@@ -110,8 +127,16 @@ export default function SignInPage() {
           >
             {isLoading ? "Signing in..." : "Sign In"}
           </Button>
-          <Button variant="outline" className="w-full" disabled>
-            <GoogleIcon/>
+          <Button
+            variant="outline"
+            className="w-full"
+            onClick={handleGoogleSignIn}
+          >
+            <img
+              src="https://www.gstatic.com/images/branding/googlelogo/svg/googlelogo_clr_74x24px.svg"
+              alt="Google"
+              className="w-4 h-4 mr-2 filter brightness-0 invert"
+            />
             Sign in with Google
           </Button>
         </CardFooter>
